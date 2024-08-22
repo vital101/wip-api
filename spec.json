@@ -1,0 +1,182 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+      "title": "Timeclock API",
+      "description": "API for handling employee timeclock actions like punch in, punch out, break in, and break out.",
+      "version": "1.0.0"
+    },
+    "servers": [
+      {
+        "url": "https://api.example.com/v1",
+        "description": "Production server"
+      },
+      {
+        "url": "https://sandbox.api.example.com/v1",
+        "description": "Sandbox server"
+      }
+    ],
+    "paths": {
+      "/timeclock/punch": {
+        "post": {
+          "summary": "Punch in or out",
+          "description": "Records an employee's punch in or punch out.",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "employeeId": {
+                      "type": "string",
+                      "example": "12345"
+                    },
+                    "action": {
+                      "type": "string",
+                      "enum": ["in", "out"],
+                      "example": "in"
+                    },
+                    "timestamp": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2024-08-22T08:00:00Z"
+                    }
+                  },
+                  "required": ["employeeId", "action", "timestamp"]
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Punch recorded successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "success"
+                      },
+                      "punchId": {
+                        "type": "string",
+                        "example": "punch-67890"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad request, invalid input",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "error"
+                      },
+                      "message": {
+                        "type": "string",
+                        "example": "Invalid employee ID or action"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/timeclock/break": {
+        "post": {
+          "summary": "Start or end a break",
+          "description": "Records an employee's break in or break out.",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "employeeId": {
+                      "type": "string",
+                      "example": "12345"
+                    },
+                    "action": {
+                      "type": "string",
+                      "enum": ["break_in", "break_out"],
+                      "example": "break_in"
+                    },
+                    "timestamp": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2024-08-22T12:00:00Z"
+                    }
+                  },
+                  "required": ["employeeId", "action", "timestamp"]
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Break action recorded successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "success"
+                      },
+                      "breakId": {
+                        "type": "string",
+                        "example": "break-67890"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad request, invalid input",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "type": "string",
+                        "example": "error"
+                      },
+                      "message": {
+                        "type": "string",
+                        "example": "Invalid employee ID or action"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "PunchAction": {
+          "type": "string",
+          "enum": ["in", "out"]
+        },
+        "BreakAction": {
+          "type": "string",
+          "enum": ["break_in", "break_out"]
+        }
+      }
+    }
+  }
